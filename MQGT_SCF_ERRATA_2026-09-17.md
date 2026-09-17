@@ -129,6 +129,33 @@ w ≳ dps/0.301, producing a spurious harmonic tail; v2 uses a hybrid
 direct-sum Hurwitz for w > 40. All values above are stable under
 jmax/precision ladders and x₀-shift consistency (|Δ| = 3.9×10⁻⁴⁷).
 
+**E3 addendum (2026-09-17, normalization-derivation diagnosis).** We attempted
+to close the remaining gap — why the constants enter Δφ_univ as α³S7/56 and
+α⁴S7′/16 — and report three concrete findings:
+
+1. **The upstream derivation skeleton is structurally incapable of producing
+   the constants.** `t3_beltrami_exact.py` models the E-coupled endomorphism as
+   E_p(E) = (n−p) + ηE, which makes a₄(E) *quadratic* in E, so W‴(0) and
+   W⁗(0) vanish identically; it also identifies a₄ (a local heat-kernel
+   coefficient) with W = log det (a spectral invariant), and its two a₄
+   functions disagree on the rank factor. This is why the T-3 gate stalled at
+   "BLOCKED," not lack of computing power.
+2. **The sphere pattern in the phase is now structurally confirmed.** The
+   exponent reads as a sum over odd spheres: α·ζ(3) (S³ sector), α²·ζ(5)
+   (S⁵), α³·(S⁷ Beltrami determinant), α⁴·(S⁹ determinant). Our
+   identification of S7′ on S⁹ is therefore not a foreign assignment — it is
+   exactly the next entry in the program's own pattern. A naive single-coupling
+   determinant-shift completion fails (κ₃ ≈ −0.78 vs κ₄ ≈ 2.82 on different
+   spheres), so the α-dependence enters differently than a constant spectral
+   shift; the precise entry point is defined in the Nielsen TUFT manuscript
+   (Eq. 17), which is not in the public repository — that text is the missing
+   input for closing the 56 = C(8,3) and 16 = 2⁴ normalizations.
+3. **Bonus value for the lepton sector.** The TUFT lepton winding action
+   S[A] = ½∫_{S³} A∧⋆BA (audit p. 6408) needs the S³ Beltrami determinant:
+   ζ′_ce1(S³)(0) = 3.5539603045851, so det′|B| = exp(−½ζ′) = 0.169148178512
+   and the Gaussian factor (det′|B|)^(−1/2) = 2.43145556544 — now computed to
+   full precision whenever the sector is revisited.
+
 ## E4. T-1 (α⁻¹ identity): FAIL confirmed; gate-passing corrections provably uncertifiable
 
 The failure reproduces exactly: formula value 137.036082448164 vs CODATA
