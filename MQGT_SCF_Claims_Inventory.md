@@ -28,9 +28,9 @@ and a preregistered interferometric exclusion observable (EMP-01).
 | C4 | Corrected estimand α_on/off formulas with N1 common-mode null | Documented in GATE1_RECONCILIATION | ✓ `falsifiable_predictions.py` reproduces printed table; honestly labeled "illustrative only" |
 | C5 | QRNG/fifth-force/neutrino claims are **separate channels**, not EMP-01 | Corrected 2026-09-14 | ✓ Confirmed in current code (earlier QRNG misidentification retracted) |
 | C6 | UV completion: gN\* ≈ 4.435 (2 scalars), ≈ 5.03 (4 scalars); SM matter → no physical UV FP; matter → Gaussian | "Solid" | ☐ Not yet independently run (`bridge_d_uv*.py`, `uv_dynamical_gn_complete.py`) |
-| C7 | Neutrino portal: Σm_ν = 0.05928 eV "exact match"; y_ν = 0.1976/gen; ⟨E⟩ = DETAE = 0.1 eV from emp01 | "Solid" (VEV no longer ad hoc) | ☐ Not yet independently run (`neutrino_portal.py`, `neutrino_vev_dynamics.py`) |
-| C8 | T-3: S7 = 1.748452, S7' = 0.41364; ζ′_Δ2(0) = −0.41364 | "Solid" (framework) | ☐ Not yet independently run (`t3_beltrami_*.py`) |
-| C9 | T-1: α⁻¹ = 137.03608245 via Hopf volume ratio (Theorem 66) | **Known FAIL** (6 digits vs 8+ target) | ✗ **Independently reproduced the failure**: rel.dev 6.077×10⁻⁷ vs CODATA 137.035999178, exit 1 — matches their documentation exactly |
+| C7 | Neutrino portal: Σm_ν = 0.05928 eV "exact match"; y_ν = 0.1976/gen; ⟨E⟩ = DETAE = 0.1 eV from emp01 | "Solid" (VEV no longer ad hoc) | ⚠ Arithmetic exact; single-y_ν contradicts oscillations; **3-Yukawa fix solved** (variants A/B, §E-C7, errata E2) |
+| C8 | T-3: S7 = 1.748452, S7' = 0.41364; ζ′_Δ2(0) = −0.41364 | "Solid" (framework) | ✓ **RESOLVED**: S7 = ½ζ′_ce3(S⁷) = 1.74845220445 (7 digits); S7′ = −ζ′_ce2(S⁹) = 0.41364465819 (5 digits); audit's S⁷-Δ₂ assignment wrong (errata E3) |
+| C9 | T-1: α⁻¹ = 137.03608245 via Hopf volume ratio (Theorem 66) | **Known FAIL** (6 digits vs 8+ target) | ✗ **Independently reproduced the failure**: rel.dev 6.077×10⁻⁷ vs CODATA 137.035999178; v2: 58 pre-declared candidates pass gate ⇒ corrections uncertifiable, derivation required (errata E4) |
 | C10 | Φ_c/E experimental signatures (interferometry V/V₀ = e^(−ΓTΔX²), fifth force, QRNG bias) | Untested; blocked pending lab preregistration | ☐ Correctly blocked; no experimental claims to verify |
 
 ## B. What tonight's independent run establishes
@@ -118,6 +118,14 @@ should always be printed with that label.
 - **Finding 3 (circularity risk):** ⟨E⟩ = DETAE = 0.1 eV is anchored to the
   EMP-01 monitor-switching scale, which is itself unmeasured. The VEV is
   internally frozen (good) but externally unanchored until EMP-01 runs.
+- **RESOLUTION (2026-09-17 v2):** the 3-Yukawa repair is exactly solved.
+  Variant A (sum rule preserved, Σm_ν = 0.05928 eV): (m₁,m₂,m₃) =
+  (0.481, 8.627, 50.172) meV, Yukawa ratios (0.0243, 0.4366, 2.5391), span
+  104×. Variant B (span capped at 5.8×): (8.781, 12.301, 50.932) meV, ratios
+  (0.4444, 0.6225, 2.578), Σm_ν floats to 0.0720 eV (still below the ~0.12 eV
+  cosmological bound). Both fit Δm²₂₁ and |Δm²₃₁| exactly. The program must
+  choose: keep the printed sum (A, hierarchical texture) or keep O(1) Yukawas
+  (B, sum becomes ≈0.072 eV). See errata E2.
 
 ### Pipeline self-note
 This session again validated the harness pattern: a naive trajectory-threshold
@@ -148,6 +156,25 @@ convention behind −0.41364 (Gilkey/Dowker–Kirsten "modified" ζ? Branson
 conformal operator? different shift?), because under the standard de Rham
 convention the value is −0.619824. Errata item.
 
+- **RESOLUTION (2026-09-17 v2, `mqgt_t3_reverse_search.py`):** both quoted
+  constants are now *identified* as spectral determinants, on the spheres of
+  the program's own Hopf structure:
+  - **S7 = 1.748452 = ½ ζ′(0) of coexact 3-forms on S⁷** (computed
+    1.74845220444776; all 7 digits). The ce3 tower is pure-square,
+    λ_k = (k+4)², deg = (x²−1)(x²−4)(x²−9)/18, x = k+4 (k=0 anchor = C(8,4) =
+    70 ✓). The ½ is the |B| vs B² relation for the Beltrami operator B = ⋆d on
+    S⁷ 3-forms — the program's stated operator.
+  - **S7′ = 0.41364 = −ζ′(0) of coexact 2-forms on S⁹** (computed
+    0.41364465819; all 5 digits; x₀-shift consistent to 3.9×10⁻⁴⁷). S⁹ is the
+    sphere of the S¹ → S⁹ → CP⁴ fibration in the program's own
+    compactification map — the same fibration behind T-1.
+  The audit's assignment "ζ′_Δ₂(0) on S⁷" is wrong (that value is −0.619824);
+  the constants convert from quoted literals into identified spectral
+  determinants. What remains open is the *derivation* of their α³/56, α⁴/16
+  normalizations via the Gilkey a₄ E-coupling expansion. Numerics caution:
+  ζ_R(w)−head subtraction is catastrophically unstable for w ≳ dps/0.301
+  (harmonic ghost tail); the scan uses hybrid direct-sum Hurwitz for w > 40.
+
 ### C9 — T-1 α⁻¹ identity: **FAIL confirmed; no simple repair; one flagged coincidence**
 `mqgt_t1_independent.py`:
 - Arithmetic verified: formula gives 137.036082448164 vs CODATA
@@ -165,3 +192,12 @@ convention the value is −0.619824. Errata item.
   actual topological derivation (χ(CP⁴)=5 / Pontryagin / Nielsen Eq. 11 route
   noted in their code comments), not a search. A Lean-checked volume identity
   remains the right eventual tool.
+- **SHARPENED (2026-09-17 v2, `mqgt_t1_topological_scan.py`):** writing the
+  required correction as c·α³ needs c = 1.563718224. A pre-declared family of
+  13,057 expressions from the program's own topological integers (χ=5,
+  Pontryagin coefficients, 9, 8, 1920, 4) and π contains **58 distinct values
+  that pass the 1e-8 gate** (π/2 at 2.8×10⁻⁹; χ²/2⁴ = 25/16 at 4.7×10⁻¹⁰;
+  56 others). Gate-passing in this class is therefore vacuous as evidence; no
+  α³-order correction is citable without a structural derivation. Also noted:
+  `t1_hopf_final.py` misprints p₁(CP⁴) = 10h², p₂ = 35h⁴; correct values are
+  p₁ = 5h², p₂ = 10h⁴ (errata E5).
