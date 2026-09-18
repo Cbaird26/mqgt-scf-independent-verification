@@ -220,3 +220,51 @@ print("  Extraction audit: -zeta'_n(0) vs D(n), and zeta(3)n^2 asymptotic")
 for n in (1, 2, 3):
     print(f"    n={n}: -zeta'_n(0) = {mp.nstr(-zp_sector(n), 12)}   D(n) = {D_printed[n]}"
           f"   D(n)-zeta(3)n^2 = {mp.nstr(D_printed[n]-z3*n**2, 6)}")
+
+print()
+print("=" * 74)
+print("[F] Eq. (112): quark masses on S^5 (Theorem 37)")
+print("=" * 74)
+
+spectral5 = (3*z5 + 5*pi**2*z3) / (8*pi**4)
+kappa5 = exp(spectral5/6) / (8*pi**3)
+Lam5 = (2*pi/sqrt(3)) * v * kappa5**3
+a5 = exp(spectral5/6) * sqrt(3) * (2 + z3/(4*pi**2))
+C5 = z3/12
+b5 = z5/(8*pi**4)
+sig5 = z3/(16*pi**2)
+tauK = {1: mpf(1), 2: mpf(4), 3: mpf(3)}
+
+print(f"  spectral5 = {mp.nstr(spectral5, 12)}")
+print(f"  kappa5 = {mp.nstr(kappa5, 12)}")
+print(f"  Lambda5 = {mp.nstr(Lam5, 12)} MeV  (printed 6.09144e-2)")
+print(f"  a5 = {mp.nstr(a5, 12)}  (printed 3.564112)")
+print(f"  C5 = {mp.nstr(C5, 12)}  (printed 0.100171)")
+
+def lamT(n):
+    if n == 1:
+        return mpf(2)/(3*sqrt(3))
+    return 2/pi + (z3/(12*pi))*(mpf("2.5") - n)
+
+def quark_mass(n, sign):
+    expo = (a5 + sign*lamT(n))*n + C5*n**2 + b5*n*(n+1)/2 + sig5*log(tauK[n])
+    m = Lam5*(n+1)*exp(expo)
+    if n == 1:
+        m *= mpf(2)/3
+    return m
+
+# assignment: n=1 -> u = -lamT, d = +lamT ; n=2 -> s = -, c = + ; n=3 -> b = -, t = +
+quarks = [("u", 1, -1, "2.16", "0.07"), ("d", 1, +1, "4.67", "0.09"),
+          ("s", 2, -1, "93.4", "0.8"),  ("c", 2, +1, "1270", "20"),
+          ("b", 3, -1, "4180", "30"),   ("t", 3, +1, "172760", "300")]
+printed_pred = {"u": "2.160005", "d": "4.66418", "s": "93.5650",
+                "c": "1272.714", "b": "4172.22", "t": "172864.95"}
+print()
+for name, n, sgn, pdgv, pdgs in quarks:
+    m = quark_mass(n, sgn)
+    pp = mpf(printed_pred[name]); pv, ps = mpf(pdgv), mpf(pdgs)
+    print(f"  {name}: pred {mp.nstr(m, 10)} MeV | printed {pp} (rel {float(abs(m-pp)/pp):.1e})"
+          f" | PDG {pv}+/-{ps} | rel err {float((m-pv)/pv):+.4%} | pull {float((m-pv)/ps):+.2f} sigma")
+print()
+print(f"  lambdaT(1) = {mp.nstr(lamT(1), 10)} (2/(3 sqrt 3)); d/u ratio pred"
+      f" {float(quark_mass(1,1)/quark_mass(1,-1)):.6f} vs printed {4.66418/2.160005:.6f}")

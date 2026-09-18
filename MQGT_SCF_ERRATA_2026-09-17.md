@@ -340,6 +340,29 @@ is printed, "0.00σ on all three leptons" should read "all three leptons
 match after a single normalization constant whose printed formula is
 incomplete." The physics content (the n-dependent spectrum) is unaffected.
 
+## E8. Quark masses (new v3): fully verified — no erratum, one reviewer note
+
+Theorem 37 (v5 Eq. (112)) and its supporting chain (Eqs. (100)–(111)):
+κ5, Λ5 = (2π/√3)vκ5³ = 6.09144×10⁻² MeV, a5 = e^{spectral5/6}√3(2 +
+ζ(3)/4π²) = 3.564112, C5 = ζ(3)/12, β5 = ζ(5)/8π⁴, σ5 = ζ(3)/16π²,
+τ = (1, 4, 3), and the parity doublet λT(1) = 2/(3√3), λT(n) = 2/π +
+(ζ(3)/12π)(5/2 − n) for n = 2, 3 — all reproduce to every printed digit,
+and the six quark masses match the printed table to ≤ 10⁻⁶ relative with
+all six PDG pulls ≤ 0.35σ (`tuft_neutrino_alpha_verify.py` [F]). The d/u
+ratio (2.15934) independently confirms λT(1) = 2/(3√3) rather than
+(2/3)√3. **Unlike the lepton shell (E7), the S⁵ normalization is complete
+as printed** — Λ5 works exactly with no missing constant — which
+strengthens the reading that E7 is an omitted factor in one printed
+formula, not a structural problem. This is the strongest single
+verification in the program: six masses across five orders of magnitude
+(2.16 MeV to 172.9 GeV) from one closed-form system.
+
+**Reviewer note (not an erratum):** the comparison mixes PDG quark-mass
+conventions (MSbar at 2 GeV for u/d/s, MSbar at the quark mass for c/b,
+direct reconstruction for t) without stating scheme or scale; a referee
+will ask. The light-quark agreement (u, d, s) is a weak test at current
+errors; c, b, t at 0.14–0.35σ are the substantive ones.
+
 ## E5. Minor: Pontryagin classes of CP⁴ misprinted (documentation)
 
 `t1_hopf_final.py` prints "p₁ = 10h², p₂ = 35h⁴" for CP⁴. With
@@ -372,6 +395,9 @@ classes.
   coefficient, and all generation-dependent content of Theorem 34 verify
   exactly; the printed overall scale is off by one constant factor
   (E7).
+- The full quark sector (Theorem 37): all coefficients and all six masses
+  reproduce to ≤10⁻⁶ relative, all PDG pulls ≤ 0.35σ, with no missing
+  normalization (E8).
 - CRITICAL_ASSESSMENT.md's solid/open split matches independent observation,
   including the honest T-1 FAIL, which remains open (E4).
 
