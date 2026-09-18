@@ -172,3 +172,51 @@ print(f"    muon:     pred {mp.nstr(a_mu,13)} vs PDG 1.165920715e-3 +/- 1.46e-9"
       f"  -> pull {float((a_mu - mpf('1.165920715e-3'))/mpf('1.46e-9')):+.2f} sigma")
 print(f"    LQCD WP25 comparison: pred - LQCD(1.16592033e-3) = "
       f"{float(a_mu - mpf('1.16592033e-3')):.3e}")
+
+print()
+print("=" * 74)
+print("[E] Eq. (78): charged lepton masses on S^3 (Theorem 34)")
+print("=" * 74)
+
+alpha_th = alpha_thm
+kappa3 = exp(z3/(24*pi**2)) / (4*pi**2)
+Lam_hopf = sqrt(2*pi) * v * kappa3**6      # ell/p = 6/1
+a_hel = 6*sqrt(2) * exp(z3/(24*pi**2))
+D_printed = {1: mpf("1.203011392"), 2: mpf("4.806545406"), 3: mpf("10.818228646")}
+tau3 = {1: mpf(1), 2: mpf(1), 3: sqrt(3)}
+
+print(f"  kappa   = {mp.nstr(kappa3, 12)}  (printed: (4pi^2)^-1 exp(zeta(3)/24pi^2))")
+print(f"  Lambda_Hopf = {mp.nstr(Lam_hopf, 12)} MeV")
+print(f"  a = {mp.nstr(a_hel, 12)}  (printed 8.5284)")
+
+# Verify the sector zeta values, Eq. (79)-(81)
+zH0 = lambda a_: zeta(0, a_)
+zp1 = zeta(-2, 2, 1) - zeta(0, 2, 1)   # zeta'_1(0)
+print(f"\n  zeta'_1(0) = {mp.nstr(zp1, 12)}   (printed 0.888490076)")
+def zp_sector(n):
+    return zp1 + sum(j*(j+2)*log(j+1) for j in range(1, n))
+for n in (2, 3):
+    print(f"  zeta'_{n}(0) = {mp.nstr(zp_sector(n), 12)}")
+
+# Masses with printed D(n)
+pdg = {1: (mpf("0.51099895000"), mpf("1.5e-7")),
+       2: (mpf("105.6583755"), mpf("2.3e-6")),
+       3: (mpf("1776.86"), mpf("0.12"))}
+names = {1: "e", 2: "mu", 3: "tau"}
+print()
+for n in (1, 2, 3):
+    m = Lam_hopf*(n+1)*exp(a_hel*n - D_printed[n] + n*alpha_th/6 + sig3*log(tau3[n]))
+    mpdg, sig = pdg[n]
+    print(f"  m_{names[n]:4s} pred = {mp.nstr(m, 12)} MeV  PDG = {mpdg}"
+          f"  pull = {float((m-mpdg)/sig):+.2f} sigma")
+    # D required to hit PDG exactly
+    D_req = a_hel*n + n*alpha_th/6 + sig3*log(tau3[n]) - log(mpdg/(Lam_hopf*(n+1)))
+    print(f"         D({n}) printed = {D_printed[n]},  D required by PDG = {mp.nstr(D_req, 12)},"
+          f"  diff = {mp.nstr(D_printed[n]-D_req, 6)}")
+
+# Compare: what does -zeta'_n(0) look like vs D(n)? (extraction audit)
+print()
+print("  Extraction audit: -zeta'_n(0) vs D(n), and zeta(3)n^2 asymptotic")
+for n in (1, 2, 3):
+    print(f"    n={n}: -zeta'_n(0) = {mp.nstr(-zp_sector(n), 12)}   D(n) = {D_printed[n]}"
+          f"   D(n)-zeta(3)n^2 = {mp.nstr(D_printed[n]-z3*n**2, 6)}")

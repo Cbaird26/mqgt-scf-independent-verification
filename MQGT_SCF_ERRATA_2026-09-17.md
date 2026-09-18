@@ -300,6 +300,46 @@ discriminating test: the theory's a_τ differs between the two α
 conventions by ~3×10⁻¹⁰, within reach of the Belle II / CLIC sensitivities
 the manuscript itself names.
 
+## E7. Charged-lepton masses (new v3): generation structure exact; printed normalization misses PDG by one constant factor
+
+Theorem 34 (v5 Eq. (78)) predicts the charged-lepton masses from
+m_n = Λ_Hopf·(n+1)·exp(a·n − D(n) + nα/6 + σ₃lnτ₃(K_n)) with all
+coefficients derived on S³: a = 6√2·exp(ζ(3)/24π²) = 8.52845144101,
+κ = (4π²)⁻¹exp(ζ(3)/24π²), Λ_Hopf = √(2π)·v·κ⁶, σ₃ = ζ(3)/4π²,
+τ₃ = (1, 1, √3), and D(n) "extracted from the Hurwitz evaluation" of the
+sector zeta (Eq. (79)–(82)). We implemented the full system independently
+(`tuft_neutrino_alpha_verify.py` [E]).
+
+**Verified.** (a) The sector zeta chain reproduces exactly:
+ζ′₁(0) = ½ln(2π) − ζ(3)/(4π²) = 0.888490076146 vs printed 0.888490076 ✓,
+and Eq. (81)'s finite-sum extension ✓. (b) a, κ, σ₃ all reproduce to every
+printed digit. (c) Most importantly, the *generation-to-generation*
+content is exact: the required D(n) values (back-solved from PDG masses)
+differ from the printed D(n) by a **constant** −3.4115×10⁻⁵ for all three
+generations (drift across n: 1.7×10⁻⁹). A constant exponent offset is
+absorbed entirely by the overall scale, so the n-dependent structure —
+helicity a, Casimir spread D(3)−D(1) = 9.615217254, knot torsion
+σ₃ln√3 — is verified to ~10⁻⁹ relative against both mass ratios.
+
+**Found — a one-constant normalization gap.** Evaluated literally as
+printed (Λ_Hopf = √(2π)vκ⁶ with κ as printed, D(n) as printed), the
+formula gives m = (0.5110164, 105.66198, 1776.921) MeV vs PDG
+(0.51099895, 105.6583755, 1776.86): every mass high by the *same* factor
+e^{3.4115×10⁻⁵} ≈ 1.0000341, i.e. +116σ (e), +1567σ (μ), +0.51σ (τ) —
+not the printed "0.00σ" table. Because the offset is n-independent, a
+single missing constant factor in Λ_Hopf as printed (the text states a
+constant piece of −ζ′_n(0) is "absorbed into Λ_Hopf", but the printed
+Λ_Hopf formula does not produce it) explains everything; the printed mass
+table was evidently generated with that factor included. Two concrete
+repairs, either suffices: (i) print the full Λ_Hopf including the absorbed
+constant, Λ_Hopf → Λ_Hopf·e^{−3.4115×10⁻⁵}; or (ii) give the explicit
+extraction formula mapping Eq. (79)–(81) to the printed D(n) values, which
+is currently not derivable from the printed text (we verified D(n) is not
+ζ(3)n² + linear + constant, nor −ζ′_n(0) + quadratic). Until one of these
+is printed, "0.00σ on all three leptons" should read "all three leptons
+match after a single normalization constant whose printed formula is
+incomplete." The physics content (the n-dependent spectrum) is unaffected.
+
 ## E5. Minor: Pontryagin classes of CP⁴ misprinted (documentation)
 
 `t1_hopf_final.py` prints "p₁ = 10h², p₂ = 35h⁴" for CP⁴. With
@@ -328,6 +368,10 @@ classes.
 - The g−2 formula system reproduces every printed value and published
   σ-pull exactly under the theory's own α (E6); the α-dependence caveat
   is documented there.
+- The charged-lepton sector zeta chain (Eq. (79)–(82)), helicity
+  coefficient, and all generation-dependent content of Theorem 34 verify
+  exactly; the printed overall scale is off by one constant factor
+  (E7).
 - CRITICAL_ASSESSMENT.md's solid/open split matches independent observation,
   including the honest T-1 FAIL, which remains open (E4).
 
