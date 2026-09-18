@@ -1,5 +1,10 @@
 # MQGT-SCF Independent Verification Packet
 
+[![Release](https://img.shields.io/github/v/release/Cbaird26/mqgt-scf-independent-verification)](https://github.com/Cbaird26/mqgt-scf-independent-verification/releases)
+[![Paper (PDF)](https://img.shields.io/badge/paper-main.pdf-blue)](main.pdf)
+[![Lean 4](https://img.shields.io/badge/Lean%204-6%2F6%20kernels%20axiom--clean-success)](tuft_verify_fixed.lean)
+[![License](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey)](LICENSE)
+
 Independent, third-party-style re-verification of selected computational claims from the
 **MQGT-SCF** (Multi-Quantum Geometric Theory / Self-Consistent Field) program by
 Christopher Baird.
@@ -8,6 +13,7 @@ Christopher Baird.
 - This packet was produced on 2026-09-16/17 against the September 2026 GitHub head of that
   repository. It is a verification layer, **not** a fork: nothing here modifies the upstream
   claims; disagreements are recorded as errata for the author to adjudicate.
+- **v3 (2026-09-18):** adds the full verification paper (LaTeX + PDF) covering TUFT v5 end-to-end; see release `v1.0-paper`.
 - **v2 (2026-09-17):** repair pass. Errata E2 and E3 are now **solved/resolved**; E4 is
   sharpened to a no-go result for fitted corrections.
 
@@ -17,6 +23,9 @@ Christopher Baird.
 |---|---|
 | `MQGT_SCF_Claims_Inventory.md` | Full claims inventory with per-claim verification status, including Stage-3 results (C6a/C6b/C7/C8/C9) and v2 resolutions |
 | `MQGT_SCF_ERRATA_2026-09-17.md` | Errata E1–E5 with fixes: E2 solved (3-Yukawa texture), E3 resolved (both T-3 constants identified), E4 sharpened (58 gate-passing coincidences), E5 minor |
+| `main.tex` / `main.pdf` | **Full verification paper** (8 pp, Tectonic-compiled, Overleaf-ready): MQGT-SCF E1–E5 plus complete TUFT v5 verification (E6–E13) — spectral determinants, α, neutrinos, g−2, leptons, quarks, bosons, CKM, Λ, and Lean kernels |
+| `tuft_neutrino_alpha_verify.py` | TUFT v5 verification script, sections [A]–[J]: α (Wyler-identical to 20 digits), both ζ′ towers, neutrino masses, g−2 (with E6 cancellation caveat), leptons, quarks (all ≤0.35σ), bosons (E9 resolved as e^{−α/4π}), CKM, Λ, interferometer table |
+| `tuft_verify_fixed.lean` | Lean 4.34.0 machine-checked kernels — 6/6 axiom-clean |
 | `mqgt_c6_independent_uv.py` | Independent implementation of the Bridge-D UV fixed-point / stability analysis |
 | `mqgt_t3_independent.py` | Independent spectral-zeta computation on the unit S⁷ (de Rham/Hodge towers) |
 | `mqgt_t3_reverse_search.py` | Pre-declared reverse-engineering scan that identifies the T-3 constants: coexact p-form ζ′(0) on round S^n, n = 1,3,5,7,9,11, with Killing/Λ^p anchors and stabilized Hurwitz numerics |
