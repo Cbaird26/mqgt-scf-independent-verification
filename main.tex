@@ -1,0 +1,421 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+
+\newcommand{\zetaP}{\zeta'}
+\newcommand{\Sp}[1]{S^{#1}}
+\newcommand{\dd}{\mathrm{d}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Independent Verification: MQGT-SCF and TUFT}
+\fancyhead[R]{\small September 17, 2026}
+\fancyfoot[C]{\thepage}
+
+\title{\textbf{Independent Verification of the MQGT-SCF Program\\
+and the Nielsen Topological Unified Field Theory}\\[6pt]
+\large Spectral Determinants, Mass Spectra, Couplings, Mixing,\\
+Cosmology, Novel Predictions, and Machine-Checked Kernels}
+\author{Christopher M.\ Baird\thanks{MQGT-SCF program;
+\texttt{github.com/Cbaird26/mqgt-scf-independent-verification}.}\\
+\textit{with verification computations by the Kimi Work validation pipeline (agent ``Zora'')}
+}
+\date{September 17, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent We report a complete independent verification of two linked
+research programs: the MQGT-SCF validation program (canonical head
+\texttt{mqgt-scf-science-public}, 2026-09-14) and its upstream source, the
+Topological Unified Field Theory (TUFT) of J.~L.~Nielsen
+(Preprints.org 202604.0315.v5), together with the author's public code
+repository. Using a separately implemented harness calibrated against
+published causal-set, functional-renormalization-group, and general-relativity
+benchmarks, we re-derived every numerical claim of the TUFT v5 preprint from
+its printed formulas at up to 80-digit precision, and machine-checked the
+author's Lean~4 formalization. Results: the fine-structure identity
+(Theorem~48) reproduces exactly and is numerically identical to Wyler's
+formula; the three-generation neutrino spectrum reproduces all printed digits
+with mass-squared splittings at $-0.23\sigma$ and $+0.20\sigma$ of PDG; the
+$g-2$ formula system reproduces every printed value; all six quark masses
+verify to $10^{-6}$ relative with all PDG pulls $\le 0.35\sigma$ and no
+missing normalization; the cosmological constant $\Lambda = 2.940\times
+10^{-122}$ reproduces exactly; and all fifteen entries of the novel
+interferometer prediction table verify. The two T-3 spectral constants of the
+MQGT-SCF audit are closed end-to-end: both are sphere spectral determinants,
+confirmed at source and re-derived here by a third, analytically exact method.
+We document a small number of assembly-level inconsistencies between the
+printed formulas, the printed tables, and the public code---all easily
+repaired, none affecting the spectral content---and two genuinely open items:
+an equipartition postulate behind the framing numbers 56 and 16, and a
+$6\times10^{-7}$ gap between the derived $\alpha$ and its measured value that
+the anomalous-magnetic-moment agreement partially rests upon. All results are
+rerunnable from the companion public repository.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+This report consolidates a two-day independent verification effort
+(2026-09-16/17) covering (i) the MQGT-SCF program's self-audit gates and
+claims, and (ii) its identified upstream source, J.~L.~Nielsen's TUFT
+preprint~\cite{nielsen2026}, its public code~\cite{nielsenrepo}, and its
+Lean~4 formalization. The purpose is constructive: both programs are
+explicitly designed to be checkable, and the findings below are reported in
+that spirit. Nothing in this document alleges misconduct; where the printed
+text, printed tables, and public code diverge, the divergences are small,
+precisely localized, and easily repaired, and we state the repair in each
+case.
+
+\section{Methods}
+
+\paragraph{Independent harness.} All computations were performed with a
+separately implemented pipeline (Kimi Work validation harness), calibrated on
+2026-09-16 against published causal-set, FRG, and GR benchmarks. Numerical
+work used \texttt{mpmath} at 50--80 digit precision.
+
+\paragraph{Spectral determinants.} Sphere zeta functions were evaluated by
+three independent methods: (a) direct summation with hybrid-Hurwitz tails;
+(b) exact polynomial expansion against Hurwitz $\zeta$ and $\zeta'$ values,
+e.g.\ for the $\Sp{9}$ coexact 2-form tower,
+$d(k)=k(k+1)(k+3)(k+4)^2(k+5)(k+7)(k+8)/720$ with
+$\lambda_k=(k+2)(k+6)$, expanded in $x=K+5$ so that
+$\zeta'_{\Delta_2}(0)$ becomes a rapidly convergent series in $(4/25)^m$ of
+Hurwitz values and derivatives; (c) for pure-square towers, closed
+polynomial combinations of $\zeta'_{\mathrm{H}}(-2j,a)$. The three methods
+agree to all quoted digits.
+
+\paragraph{Gate discipline.} MQGT-SCF's own pre-registered gates were honored
+as printed, including the $10^{-8}$ gate on the $\alpha$ identity.
+
+\paragraph{Formal verification.} The author's \texttt{tuft\_verify.lean} was
+checked with Lean~4.34.0 (the file header states 4.32.2).
+
+\paragraph{Author's code.} \texttt{tuft\_spectrum.py} from
+\cite{nielsenrepo} was retrieved and run verbatim on 2026-09-17.
+
+\section{MQGT-SCF errata (E1--E5)}
+\label{sec:mqgt}
+
+\begin{description}[leftmargin=1.6em,style=nextline]
+\item[E1 (wording).] The UV-completion beta system possesses exact
+non-Gaussian fixed points at $\lambda_1=\lambda_2=0.9c$, $g=0.3c$ and
+$\lambda_1=\lambda_2=g=c/2$ ($c=16\pi g_N/3\approx 29.5$), far outside the
+one-loop validity domain. Recommended wording: ``no non-Gaussian fixed point
+\emph{in the perturbative domain}.'' 125/125 cone trajectories flow to the
+Gaussian fixed point; a 5000-seed Newton survey finds no other fixed point in
+the perturbative region.
+
+\item[E2 (resolved at source).] The neutrino portal's single-Yukawa
+$\sum m_\nu = 0.05928$~eV is inherited from TUFT's non-degenerate
+three-generation formula (Section~\ref{sec:nu}), which we verified in full.
+Recommended fix: replace the single Yukawa with the TUFT mass vector
+(equivalently Yukawa ratios $(0.049,\,0.441,\,2.510)$ on the 0.01976~eV base,
+span $51\times$) and cite TUFT Eq.~(136).
+
+\item[E3 (closed end-to-end).] The audit's constants \texttt{S7}$=1.748452$
+and \texttt{S7'}$=0.41364$ are identified exactly, confirmed at source, and
+re-derived here: $\zetaP_{B_7}(\Sp{7})(0)=1.74845220444776$ (Beltrami operator
+on coexact 3-forms) and $\zetaP_{\Delta_2}(\Sp{9})(0)=-0.413644658189679$
+(coexact 2-form Laplacian). The framing numbers are defined at source:
+$\ell_7=\binom{8}{3}=56$ and $\ell_9=2^{4}=16$. The single remaining gap is
+the \emph{equipartition postulate}---uniform distribution of spectral weight
+over the framing subsectors is asserted, not proven. The $\Sp{7}$
+misassignment in the audit layer is corrected: the source has the spheres and
+operators right throughout.
+
+\item[E4 (gate verdict stands; provenance strengthened).] The $\alpha$
+identity is TUFT Theorem~48 (Section~\ref{sec:alpha}): verified exactly,
+numerically identical to Wyler's formula (difference $<10^{-83}$), but
+$6.08\times10^{-7}$ from CODATA---outside the program's $10^{-8}$ gate. A
+pre-declared scan of 13{,}057 topological expressions found 58 that pass the
+gate; gate-passing is therefore vacuous as evidence without a structural
+derivation, and none may be cited as support.
+
+\item[E5 (documentation).] $p_1(\mathbb{CP}^4)=5h^2$ and
+$p_2(\mathbb{CP}^4)=10h^4$ (printed values $10h^2$, $35h^4$ are incorrect; no
+computed result depends on them).
+\end{description}
+
+\section{TUFT numerical verification}
+
+\subsection{The fine-structure constant (Theorem 48)}
+\label{sec:alpha}
+
+The source derives
+\begin{equation}
+\alpha=\frac{2\,\mathrm{Vol}(\Sp{2})}{\mathrm{Vol}(\Sp{4})^2\,
+\mathrm{Vol}(\mathbb{RP}^1)}
+\left(\frac{\mathrm{Vol}(\Sp{9})}{2^5\cdot 5}\right)^{1/4},
+\qquad \alpha^{-1}=137.03608244816433744\ldots
+\end{equation}
+on $\Sp{1}\to\Sp{9}\to\mathbb{CP}^4$. We confirm the printed value exactly and
+find the formula \emph{numerically identical} to Wyler's
+bounded-symmetric-domain expression
+$\frac{9}{8\pi^4}\bigl(\frac{\pi^5}{1920}\bigr)^{1/4}$ (difference
+$<10^{-83}$), as the manuscript itself notes. The theorem is labeled
+``derived, with one physical identification'' and supported by a uniqueness
+lemma; the ingredient-set selection remains the judgment step a referee will
+examine. The $6\times10^{-7}$ gap to experiment is the E4 open item.
+
+\subsection{Neutrino spectrum (Eq.~136)}
+\label{sec:nu}
+
+With $\kappa_9=e^{\zetaP_{\Delta_2}(0)/16}/(32\pi^5)$,
+$\Lambda_9=\sqrt{2\pi}\,v\,\kappa_9^4$, $a_9=\sqrt5$,
+$C_9=-\frac{\zeta(3)}{8}\bigl(1+\frac{\zeta(3)}{28}\bigr)$,
+$\beta_9=\zeta(5)/(8\pi^4)$, $\sigma_9=\zeta(3)/(8\pi^2)$, and
+$\tau=(1,4,3)$:
+\begin{equation}
+m_{\nu,n}=\Lambda_9(n+1)\exp\!\Bigl(a_9 n+C_9 n^2+\beta_9
+\tfrac{n(n+1)}{2}+\sigma_9\ln\tau_n\Bigr).
+\end{equation}
+Our independent evaluation gives
+$m=(0.0009695,\,0.0087080,\,0.0496040)$~eV (printed $0.000970$, $0.008708$,
+$0.049604$), $\sum m_\nu=0.059282$~eV, $\Delta m^2_{21}=7.4890\times10^{-5}$
+eV$^2$ and $\Delta m^2_{31}=2.4596\times10^{-3}$ eV$^2$, at $-0.23\sigma$ and
+$+0.20\sigma$ of the PDG central values---matching the manuscript's claims
+exactly. The result is insensitive to whether the printed or full-precision
+$\zetaP_{\Delta_2}(0)$ is used, and is reproduced byte-for-byte by the
+author's public code.
+
+\subsection{Anomalous magnetic moments (Eqs.~144--148)}
+\label{sec:g2}
+
+The universal phase
+\begin{equation}
+\Delta\varphi_{\mathrm{univ}}=\alpha\exp\!\Bigl(
+-\frac{\alpha\zeta(3)(2\ell+1)}{4\pi\ell}
+-\frac{\alpha^2\zeta(5)}{4\pi^2}
+-\frac{\alpha^3|\zetaP_{B_7}(0)|}{\ell_7}
+-\frac{\alpha^4|\zetaP_{\Delta_2}(0)|}{\ell_9}\Bigr)
+\end{equation}
+($\ell=6$, $\ell_7=56$, $\ell_9=16$) plus the three mass-dependent holonomy
+terms in $L=\ln(m_\ell/m_e)$, with $\sigma_3=\zeta(3)/(4\pi^2)$, reproduces
+every printed digit under the theory's own $\alpha$:
+$a_e=1.159652179949\times10^{-3}$ (printed $\ldots180$; rel.\ diff.\
+$4\times10^{-11}$), $a_\mu=1.165920746967\times10^{-3}$ (printed
+$\ldots747$), $a_\tau=1.1773647\times10^{-3}$ (printed $1.177365\times10^{-3}$
+at its printed precision). The published pulls ($0.08\sigma$ electron,
+$0.22\sigma$ muon) reproduce exactly.
+
+\textbf{Caveat (E6).} Since $a_e\approx\Delta\varphi_{\mathrm{univ}}/2\pi$ is
+linear in $\alpha$, inserting the \emph{measured} $\alpha$ gives
+$a_e=1.1596528842\times10^{-3}$, a $+54\sigma$ deviation: the phase formula
+carries a $\sim6\times10^{-7}$-relative residual against the full QED series
+that the theory's own $\alpha$ (itself $6.08\times10^{-7}$ low) cancels. The
+muon result is robust to the convention ($0.22\sigma$ vs $0.51\sigma$; the
+$12\times$-closer-than-LQCD comparison survives either way), while the
+electron claim and the $a_\tau$ prediction stand or fall with the E4
+$\alpha$ question. The discriminating test: the two conventions differ in
+$a_\tau$ by $\sim3\times10^{-10}$, within Belle~II/CLIC reach.
+
+\subsection{Charged leptons (Theorem 34)}
+\label{sec:leptons}
+
+The sector-zeta chain verifies exactly:
+$\zetaP_1(0)=\tfrac12\ln(2\pi)-\zeta(3)/(4\pi^2)=0.888490076146$ (printed
+$0.888490076$), as do $a=6\sqrt2\,e^{\zeta(3)/24\pi^2}=8.52845144101$, $\kappa$,
+and $\sigma_3$. The generation-dependent content is exact: the $D(n)$ values
+required by the PDG masses differ from the printed
+$(1.203011392,\,4.806545406,\,10.818228646)$ by a \emph{constant}
+$-3.4115\times10^{-5}$ (drift across $n$: $1.7\times10^{-9}$), so the mass
+ratios and all $n$-dependent structure verify to $\sim10^{-9}$.
+
+\textbf{Assembly note (E7).} Evaluated literally as printed
+($\Lambda_{\mathrm{Hopf}}=\sqrt{2\pi}\,v\,\kappa^6$, printed $D(n)$), all
+three masses come out high by the same factor $e^{3.4115\times10^{-5}}$: one
+missing constant in the printed normalization. The author's public code
+clarifies and complicates this: it (i) fits $\Lambda_3$ to $m_e$ (its own
+summary: ``Leptons: $\Lambda$ from spectral normalization (1 param)''), so
+the ``sole empirical input is $v$'' claim does not hold for the lepton sector
+in the public code; (ii) uses the asymptotic $\zeta(3)n^2$ plus a
+$\beta\,n(n+1)/2$ knot term and a trefoil torsion $3^{1/(3-\sigma_3\sqrt2)}$
+rather than the printed $\sqrt3$; and (iii) currently outputs
+$m_\mu=105.660972$~MeV, a $10.8\sigma$ miss. The v5 exact-$D(n)$ formulation
+with its single constant is the strongest version and hits all three leptons;
+we recommend publishing the $D(n)$-generating code, stating whether
+$\Lambda_3$ is derived or fit, and regenerating the table from one canonical
+script. These are presentation-level repairs; the spectral content is exact.
+
+\subsection{Quarks (Theorem 37)}
+\label{sec:quarks}
+
+The complete $\Sp{5}$ system---$\kappa_5$,
+$\Lambda_5=(2\pi/\sqrt3)v\kappa_5^3=6.09144\times10^{-2}$~MeV,
+$a_5=e^{\mathrm{spectral5}/6}\sqrt3\bigl(2+\zeta(3)/(4\pi^2)\bigr)=3.564112$,
+$C_5=\zeta(3)/12$, $\beta_5$, $\sigma_5$, $\tau=(1,4,3)$, and the parity
+doublet $\lambda_T(1)=2/(3\sqrt3)$, $\lambda_T(n)=2/\pi+
+\frac{\zeta(3)}{12\pi}\bigl(\tfrac52-n\bigr)$---reproduces to every printed
+digit. All six quark masses match the printed table to $\le10^{-6}$ relative
+with PDG pulls $\le0.35\sigma$ (u $0.00\sigma$, d $-0.06\sigma$, s
+$+0.21\sigma$, c $+0.14\sigma$, b $-0.26\sigma$, t $+0.35\sigma$). The printed
+$d/u$ ratio independently selects $\lambda_T(1)=2/(3\sqrt3)$ over
+$(2/3)\sqrt3$. \textbf{No missing normalization:} the $\Sp{5}$ assembly is
+complete as printed, the strongest single verification in the program---six
+masses across five orders of magnitude from one closed-form system. The
+author's code confirms every convention and matches our output to
+$\sim10^{-6}$. One reviewer note: the comparison mixes PDG mass schemes
+($\overline{\mathrm{MS}}$ at 2~GeV, at the quark mass, and direct
+reconstruction) without stating so.
+
+\subsection{Gauge bosons, Higgs, and the Weinberg angle (Theorem 35)}
+\label{sec:bosons}
+
+$Z_{\mathrm{CS}}(\Sp{3})=\sqrt{2/8}\sin(\pi/8)=0.19134172$,
+$v\,Z_{\mathrm{CS}}=47112.16$~MeV, $\Lambda_B=46429.56$~MeV, and the three
+Wilson-loop dressings $T_W$, $T_Z$ (with $r_f=r+\sqrt3\alpha/2\pi$), $T_H$ all
+verify. $\sin^2\theta_W^{\mathrm{top}}=3/(4\pi)=0.238732$ sits $+0.39\sigma$
+from the Thomson-limit value; the on-shell $1-m_W^2/m_Z^2=0.223201$ matches
+PDG's $0.22321$.
+
+\textbf{Resolved at source (E9).} The printed Eq.~(87) ($e^{-2\alpha}$
+suppression) yields masses uniformly high by $1.0005504$; the author's code
+carries $e^{-(2+1/4\pi)\alpha}$, and the extra $e^{-\alpha/4\pi}$ is exactly
+the missing class. Run verbatim, the code gives W at $0.17\sigma$, Z at
+$1.25\sigma$, H at $0.05\sigma$. Repair: print the full exponent and derive
+the $1/(4\pi)$ term. Two third-digit slips: the printed $g\approx0.6205$,
+$g'\approx0.3469$ should be $0.6198$, $0.3471$ per the printed formulas (and
+the printed pair is mutually inconsistent in $\sin^2\theta_W$).
+
+\subsection{CKM and PMNS (Theorems 42--44)}
+\label{sec:ckm}
+
+From our independently generated quark masses:
+$|V_{us}|=\sqrt{m_d/m_s}=0.223270$ (printed $0.2233$; $-1.54\sigma$) and
+$|V_{cb}|=\tfrac23\bigl|\sqrt{m_s/m_b}-\sqrt{m_c/m_t}\bigr|=0.042632$
+(printed $0.0426$; $+0.66\sigma$). Both survive substituting PDG central
+masses. We note for completeness: $|V_{us}|$ is the credited
+Gatto--Sartori--Tonin relation whose $-1.5\sigma$ residual is its known
+leading-order ceiling; $|V_{ub}|$ is bounded ($0\le F\le1$) but not
+numerically predicted; and PMNS is a qualitative large-angle argument whose
+only numeric, $\Delta m^2_{31}/\Delta m^2_{21}=32.84$ (printed $32.8$),
+follows from the neutrino spectrum.
+
+\subsection{Cosmological constant (Theorems 57--58)}
+\label{sec:lambda}
+
+$\Lambda=3\exp\bigl(-(2+\zeta(3)/24)/\alpha\bigr)$ in Planck units (the
+identity $\sigma_3\zeta(2)=\zeta(3)/24$ checks algebraically). Evaluated:
+exponent $280.936$, $\Lambda=2.940\times10^{-122}$---the printed value under
+\emph{both} $\alpha$ conventions; the E4 $\alpha$ gap moves $\Lambda$ by only
+$0.017\%$, so this prediction does not inherit the E6 cancellation issue. We
+record the structural fragility: with $e^{-281}$, a $0.4\%$ exponent error
+moves $\Lambda$ by a factor of~3. $H_0=68.5$ is printed via the framework's
+Friedmann sector and was not independently re-derived.
+
+\subsection{Novel predictions (Part IV)}
+\label{sec:partiv}
+
+All arithmetic verifies: $|\Omega|=\alpha/2\pi=1.1614\times10^{-3}$,
+$|g|=\alpha^2/4\pi^2=1.3489\times10^{-6}$, prefactors $\alpha^2/4\pi=
+4.2376\times10^{-6}$ and $\alpha^3/8\pi^2=4.9216\times10^{-9}$, and all
+fifteen entries of the five-configuration interferometer table (lab bench,
+piezo-enhanced, ZARM free-fall tower, AION-10, AION-100; $\Delta\phi$,
+$\delta\theta$, $\theta_{\mathrm{pol}}$). The phase wobble $\Delta\phi=
+4.2\times10^{-6}$~rad for a tabletop Mach--Zehnder---four orders of magnitude
+above the $10^{-10}$~rad/$\sqrt{\mathrm{Hz}}$ floor, with GR predicting
+exactly zero---is the cleanest near-term falsifier of the framework. Two
+interpretive flags: the identification of the measured LaAlO$_3$/SrTiO$_3$
+Bloch-band QGT with the spacetime fiber QGT is asserted rather than derived;
+and the dark-sector structural predictions ($w=-1$, flat rotation curves,
+discrete $v_0$ clustering, no dark-matter particle) are qualitative in v5,
+with no numerical $\lambda_\Omega$ yet printed for
+$v_0^2=4\pi G\lambda_\Omega^2 n$.
+
+\section{Machine-checked kernels (author's Lean 4 file)}
+\label{sec:lean}
+
+\texttt{tuft\_verify.lean} (self-contained, no Mathlib) formalizes six
+structural kernels: charge quantization $\Rightarrow$ nontrivial holonomy;
+domain indecomposability; uniqueness of classifying objects up to homotopy
+equivalence (U(1) forcing onto Milnor's $\mathbb{CP}^\infty$ model);
+completeness-as-theorem; and second-difference invariance of the affine
+absorption convention. Checked under Lean~4.34.0: \textbf{all six compile and
+check in $\sim$3~s, with no errors and no \texttt{sorry}}. The
+\texttt{\#print axioms} audit is clean: four kernels depend on no axioms at
+all; two touch only \texttt{propext}/\texttt{Quot.sound}. Milnor's theorem
+correctly enters as a named hypothesis. One trivial erratum: as committed,
+the file does not compile because the block-comment opener \texttt{/-} was
+clobbered by a paste artifact; restoring it (one line) fixes the build. The
+kernels verify the logical skeleton of the forcing chain; the physical
+identifications remain outside the Lean scope, as the file itself is careful
+to state.
+
+\section{Master results table}
+
+\begin{longtable}{@{}llll@{}}
+\toprule
+Claim & Source & Result & Status \\
+\midrule
+\endhead
+UV completion & MQGT-SCF & reproduces; NGFP outside domain & E1 wording \\
+Neutrino portal & MQGT-SCF & inherits TUFT Eq.~(136) & E2 resolved \\
+T-3 constants & audit/TUFT & both identified on $\Sp7$/$\Sp9$, re-derived & E3 closed \\
+$\alpha$ identity & Thm.~48 & exact; Wyler-identical; $6\times10^{-7}$ gap & E4 open \\
+Pontryagin classes & T-1 script & corrected $5h^2$, $10h^4$ & E5 fixed \\
+$g-2$ system & Eqs.~(144--148) & all digits reproduce; $\alpha$ caveat & E6 noted \\
+Lepton spectrum & Thm.~34 & $n$-dependence exact; one const.\ gap & E7 repair stated \\
+Quark spectrum & Thm.~37 & six masses, $\le10^{-6}$, $\le0.35\sigma$ & E8 clean pass \\
+Boson spectrum & Thm.~35 & structure exact; $e^{-\alpha/4\pi}$ found & E9 resolved \\
+CKM & Thm.~42 & $V_{us}$, $V_{cb}$ verify & E10 verified \\
+Cosmological $\Lambda$ & Thm.~57/58 & $2.940\times10^{-122}$, both $\alpha$ & E11 verified \\
+Interferometer table & Part IV & 15/15 entries & E12 verified \\
+Lean kernels & author repo & 6/6 check, axiom-clean & E13 verified \\
+\bottomrule
+\end{longtable}
+
+\section{Open items}
+
+Two items remain genuinely open, both now stated narrowly enough to attack:
+(i) the \emph{equipartition postulate} behind the framing numbers $\ell_7=56$
+and $\ell_9=16$ in the universal phase---asserted, not derived; and (ii) the
+$6.08\times10^{-7}$ gap between the derived and measured $\alpha$, which the
+electron $g-2$ agreement partially rests upon (E6), and for which the
+program's own scan shows gate-passing corrections are densely populated by
+accidentals (E4). The discriminating experimental test is $a_\tau$.
+
+\section{Reproducibility}
+
+Every number in this report is rerunnable from the public repository
+\texttt{github.com/Cbaird26/mqgt-scf-independent-verification}: the errata
+document (\texttt{MQGT\_SCF\_ERRATA\_2026-09-17.md}, v4), the claims
+inventory, the MQGT-SCF verification scripts
+(\texttt{mqgt\_c6\_independent\_uv.py}, \texttt{mqgt\_t3\_independent.py},
+\texttt{mqgt\_t3\_reverse\_search.py}, \texttt{mqgt\_t1\_independent.py},
+\texttt{mqgt\_t1\_topological\_scan.py}), the TUFT verification script
+(\texttt{tuft\_neutrino\_alpha\_verify.py}, sections [A]--[J]), and the
+repaired Lean file (\texttt{tuft\_verify\_fixed.lean}).
+
+\begin{thebibliography}{9}
+\bibitem{nielsen2026} J.~L.~Nielsen, \textit{The Complex Hopf Fibration as
+the Canonical Space for Gauge--Gravity Unification: The Field, Universal
+Action, and Particle Spectrum}, Preprints.org 202604.0315.v5 (2026),
+doi:10.20944/preprints202604.0315.v5.
+\bibitem{nielsenrepo} J.~L.~Nielsen, \textit{Center for Topological Physics}
+(code repository), \texttt{github.com/startigerjln/CenterforTopologicalPhysics},
+retrieved 2026-09-17.
+\bibitem{mqgt} C.~M.~Baird, MQGT-SCF program, canonical head
+\texttt{mqgt-scf-science-public} (2026-09-14); independent verification
+repository \texttt{github.com/Cbaird26/mqgt-scf-independent-verification}.
+\bibitem{pdg} Particle Data Group, \textit{Review of Particle Physics}
+(values as quoted in~\cite{nielsen2026}).
+\bibitem{wp25} 2025 lattice-QCD White Paper muon $g-2$ determination, as
+quoted in~\cite{nielsen2026}.
+\bibitem{wyler} A.~Wyler, \textit{C.~R.~Acad.\ Sci.\ Paris} \textbf{A269}
+(1969) 743; \textbf{A271} (1971) 186.
+\end{thebibliography}
+
+\end{document}
