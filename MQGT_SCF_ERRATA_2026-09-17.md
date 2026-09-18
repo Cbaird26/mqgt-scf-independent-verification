@@ -374,6 +374,42 @@ mutually inconsistent (they imply sin²θ_W = 0.2382 and 0.2380
 respectively, neither equal to 0.23873). Third-digit corrections; no
 structural impact.
 
+## E10. CKM/PMNS (new v3): both numerical CKM predictions verify; Vub and PMNS angles are not yet numerical predictions
+
+Theorem 42 (v5 Eqs. (156)–(158)) computed from our independently
+generated quark masses: |Vus| = √(m_d/m_s) = 0.223270 (printed 0.2233;
+PDG pull −1.54σ vs printed −1.5 ✓) and |Vcb| = (2/3)|√(m_s/m_b) −
+√(m_c/m_t)| = 0.042632 (printed 0.0426; +0.66σ vs printed +0.6 ✓). Both
+also hold with PDG central masses (0.2236, 0.04249), so the results are
+robust to the E8 mass residuals.
+
+**Reviewer notes (honesty, not errors).** (a) |Vus| = √(m_d/m_s) is the
+Gatto–Sartori–Tonin relation (1968), which the paper credits; its −1.5σ
+residual is the *known* GST ceiling — the neglected up-type rotation
+√(m_u/m_c) = 0.041 is 50× the PDG error on |Vus|, so "within 2σ" is the
+right claim, not a defect, but the residual is structural to the leading
+order, not experimental. (b) |Vub| is *not* numerically predicted: the
+text bounds the phase factor 0 ≤ F ≤ 1 and notes PDG requires F ≈ 0.40.
+(c) PMNS (Theorem 44) is a qualitative large-angle argument; the only
+numeric, Δm²₃₁/Δm²₂₁ = 32.84 (printed 32.8) ✓, follows from the E2
+spectrum. No θ₁₂, θ₁₃, θ₂₃ values exist yet to verify.
+
+## E11. Cosmological constant (new v3): verified exactly, insensitive to the E6 α question
+
+Λ = 3·exp(−(2 + ζ(3)/24)/α) in Planck units (Theorem 57/58; the identity
+σ₃·ζ(2) = ζ(3)/24 checks algebraically ✓). Evaluated: exponent 280.936,
+Λ = 2.940×10⁻¹²² — the printed value, under **both** α conventions
+(E4/E6 note: the 6×10⁻⁷ α gap moves Λ by only 0.017%, so this prediction
+does not inherit the electron g−2 cancellation problem). The exponential
+structure cuts both ways: e^{−281} means a 0.4% exponent error moves Λ by
+a factor of 3, so the 3-digit agreement is striking but structurally
+fragile — one missing O(1) term in the exponent destroys it. The w = −1
+claim is exact *by construction* (Λ defined as a topological invariant);
+whether the partition-function evaluation itself is the right vacuum
+energy is the assumption a referee will probe. H₀ = 68.5 km/s/Mpc is
+printed in the summary table; it follows from Λ through the framework's
+Friedmann sector and we did not independently re-derive it.
+
 ## E8. Quark masses (new v3): fully verified — no erratum, one reviewer note
 
 Theorem 37 (v5 Eq. (112)) and its supporting chain (Eqs. (100)–(111)):

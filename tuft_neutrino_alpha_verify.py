@@ -310,3 +310,34 @@ g_sq = 4*pi*sqrt(alpha_th/3)
 gp = sqrt(4*pi*alpha_th)/sqrt(1 - 3/(4*pi))
 print(f"  g = 4pi sqrt(alpha/3) = {mp.nstr(g_sq, 8)} (printed 0.6205; PDG MSbar MZ 0.6517)")
 print(f"  g' = {mp.nstr(gp, 8)} (printed 0.3469; PDG 0.3574)")
+
+print()
+print("=" * 74)
+print("[H] Eqs. (156)-(158): CKM elements from predicted quark masses")
+print("=" * 74)
+mq = {"u": quark_mass(1,-1), "d": quark_mass(1,1), "s": quark_mass(2,-1),
+      "c": quark_mass(2,1), "b": quark_mass(3,-1), "t": quark_mass(3,1)}
+Vus = sqrt(mq["d"]/mq["s"])
+Vcb = mpf(2)/3 * abs(sqrt(mq["s"]/mq["b"]) - sqrt(mq["c"]/mq["t"]))
+print(f"  |Vus| = sqrt(m_d/m_s) = {float(Vus):.6f}  (printed 0.2233; PDG 0.2245+/-0.0008,"
+      f" pull {float((Vus-mpf('0.2245'))/mpf('0.0008')):+.2f} sigma)")
+print(f"  |Vcb| = (2/3)|sqrt(m_s/m_b)-sqrt(m_c/m_t)| = {float(Vcb):.6f}"
+      f"  (printed 0.0426; PDG 0.0421+/-0.0008, pull {float((Vcb-mpf('0.0421'))/mpf('0.0008')):+.2f} sigma)")
+# same with PDG central masses instead of predicted
+Vus_pdg = sqrt(mpf('4.67')/mpf('93.4')); Vcb_pdg = mpf(2)/3*abs(sqrt(mpf('93.4')/mpf('4180')) - sqrt(mpf('1270')/mpf('172760')))
+print(f"  cross-check with PDG central masses: |Vus| = {float(Vus_pdg):.4f}, |Vcb| = {float(Vcb_pdg):.5f}")
+dm21 = float(m[2]**2 - m[1]**2) if False else None
+print(f"  Delta m^2_31/Delta m^2_21 ratio = {2.4596e-03/7.4890e-05:.2f}  (printed 32.8)")
+
+print()
+print("=" * 74)
+print("[I] Theorem 57/58: cosmological constant in Planck units")
+print("=" * 74)
+for aname, aa in (("alpha = Theorem 48", alpha_th), ("alpha = experiment", alpha_exp)):
+    expo = (mpf(2) + z3/24) / aa
+    Lam = 3*exp(-expo)
+    print(f"  {aname}: exponent = {float(expo):.4f},  Lambda = {float(Lam):.3e}  (printed 2.94e-122)")
+# sensitivity: d ln Lambda / d ln alpha
+print(f"  sensitivity: d ln(Lambda)/d ln(alpha) = {float(-(mpf(2)+z3/24)/alpha_th):.1f}"
+      "  -> 6.1e-7 alpha gap shifts Lambda by "
+      f"{float(abs(-(mpf(2)+z3/24)/alpha_th)*6.08e-7*100):.3f}%")
