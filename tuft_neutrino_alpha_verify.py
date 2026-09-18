@@ -16,7 +16,7 @@ so zeta'(0) is a rapidly convergent series in (4/25)^m of Hurwitz values and
 derivatives. 80-digit precision. No fitting anywhere.
 Run: python3 tuft_neutrino_alpha_verify.py
 """
-from mpmath import mp, mpf, pi, zeta, sqrt, exp, log, gamma
+from mpmath import mp, mpf, pi, zeta, sqrt, exp, log, gamma, sin
 
 mp.dps = 80
 
@@ -268,3 +268,45 @@ for name, n, sgn, pdgv, pdgs in quarks:
 print()
 print(f"  lambdaT(1) = {mp.nstr(lamT(1), 10)} (2/(3 sqrt 3)); d/u ratio pred"
       f" {float(quark_mass(1,1)/quark_mass(1,-1)):.6f} vs printed {4.66418/2.160005:.6f}")
+
+print()
+print("=" * 74)
+print("[G] Eq. (87)-(91): gauge bosons, Higgs, Weinberg angle, couplings")
+print("=" * 74)
+
+r = mpf(8)                      # k + 2, SU(2)_k at level k = 6
+Zcs = sqrt(2/r) * sin(pi/r)
+LamB = v * Zcs * exp(-2*alpha_th)
+print(f"  Z_CS(S^3) = {mp.nstr(Zcs, 12)};  v*Z_CS = {mp.nstr(v*Zcs, 12)} MeV (printed 47112)")
+print(f"  Lambda_B = {mp.nstr(LamB, 12)} MeV (printed 46429)")
+
+aB = -alpha_th*sqrt(2)/pi
+zB = sqrt(3)*alpha_th/(2*pi)
+rf = r + zB
+T_W = sqrt(3)/2 * exp(aB + zB)
+T_Z = sin(4*pi/rf)/(4*sin(pi/rf))
+T_H = mpf(2)/3 * exp(3*aB + 9*zB)
+print(f"  T_W = {mp.nstr(T_W, 12)}, T_Z = {mp.nstr(T_Z, 12)}, T_H = {mp.nstr(T_H, 12)}")
+
+def boson(n, TB):
+    return LamB*(n+1)*exp(n*alpha_th/6)*TB
+
+bpdg = {"W": (mpf("80369"), mpf("13")), "Z": (mpf("91187.6"), mpf("2.1")),
+        "H": (mpf("125200"), mpf("110"))}
+bprint = {"W": "80369.5", "Z": "91187.8", "H": "125225"}
+for name, n, TB in (("W", 1, T_W), ("Z", 2, T_Z), ("H", 3, T_H)):
+    m = boson(n, TB)
+    pv, ps = bpdg[name]; pp = mpf(bprint[name])
+    print(f"  {name}: pred {mp.nstr(m, 10)} MeV | printed {pp} (rel {float(abs(m-pp)/pp):.1e})"
+          f" | PDG {pv}+/-{ps} | pull {float((m-pv)/ps):+.2f} sigma")
+
+mW, mZ = boson(1, T_W), boson(2, T_Z)
+s2w_top = 3/(4*pi)
+s2w_os = 1 - (mW/mZ)**2
+print(f"\n  sin^2 theta_W^top = {mp.nstr(s2w_top, 8)} (printed 0.23873; PDG Thomson 0.23867+/-0.00016,"
+      f" pull {float((s2w_top - mpf('0.23867'))/mpf('0.00016')):+.2f} sigma)")
+print(f"  on-shell 1-mW^2/mZ^2 = {mp.nstr(s2w_os, 8)} (printed 0.22320; PDG 0.22321)")
+g_sq = 4*pi*sqrt(alpha_th/3)
+gp = sqrt(4*pi*alpha_th)/sqrt(1 - 3/(4*pi))
+print(f"  g = 4pi sqrt(alpha/3) = {mp.nstr(g_sq, 8)} (printed 0.6205; PDG MSbar MZ 0.6517)")
+print(f"  g' = {mp.nstr(gp, 8)} (printed 0.3469; PDG 0.3574)")

@@ -340,6 +340,40 @@ is printed, "0.00σ on all three leptons" should read "all three leptons
 match after a single normalization constant whose printed formula is
 incomplete." The physics content (the n-dependent spectrum) is unaffected.
 
+## E9. Gauge boson and Higgs masses (new v3): structure verified; same single-constant assembly gap as E7, plus two printed-value slips
+
+Theorem 35 (v5 Eq. (87)–(90)): m_B = ΛB·(n+1)·e^{nα/6}·T_B(n) with
+ΛB = v·√(2/r)sin(π/r)·e^{−2α}, r = 8. We implemented the full chain
+(`tuft_neutrino_alpha_verify.py` [G]).
+
+**Verified.** Z_CS(S³) = √(2/8)sin(π/8) = 0.19134172, v·Z_CS = 47112.16
+(printed 47112) ✓, ΛB = 46429.56 (printed 46429) ✓, the Wilson-loop
+dressings T_W, T_Z (with shifted r_f = r + √3α/2π), T_H all evaluate as
+printed ✓. sin²θ_W^top = 3/(4π) = 0.238732 vs PDG Thomson
+0.23867 ± 0.00016 → +0.39σ ✓ (printed "0.4σ" ✓); the on-shell value from
+the predicted masses 1 − m_W²/m_Z² = 0.223201 ✓ (printed 0.22320).
+
+**Found — the E7 pattern repeats.** Evaluated literally, Eq. (87) gives
+(W, Z, H) = (80413.77, 91238.07, 125294.13) MeV — every one uniformly
+high by the *same* factor 1.0005504 (+3.4σ W, +24σ Z, +0.9σ H), while the
+printed table (80369.5, 91187.8, 125225) sits at +0.04/+0.11/+0.23σ
+(χ² = 0.067 vs printed 0.066 ✓). So the printed table is internally
+consistent, but the printed formula chain is missing one constant factor
+e^{−5.504×10⁻⁴} — same documentation class as E7 (leptons,
+e^{−3.41×10⁻⁵}), different magnitude. Three shells, two with a missing
+assembly constant (S³ leptons, S³ bosons), one complete (S⁵ quarks, E8).
+Repair: print the missing factor's origin (most likely an
+O(α²)-order determinant correction to ΛB — the text itself says "the
+residual is O(α²)", and α² = 5.3×10⁻⁵ is the right order but the exact
+value 5.504×10⁻⁴ = 10.3·α² is not derived).
+
+**Minor printed-value slips.** The text prints g ≈ 0.6205 and
+g′ ≈ 0.3469; the printed formulas (92)–(93) give g = 4π√(α/3) = 0.6198
+and g′ = √(4πα)/√(1−3/4π) = 0.3471. The two printed values are also
+mutually inconsistent (they imply sin²θ_W = 0.2382 and 0.2380
+respectively, neither equal to 0.23873). Third-digit corrections; no
+structural impact.
+
 ## E8. Quark masses (new v3): fully verified — no erratum, one reviewer note
 
 Theorem 37 (v5 Eq. (112)) and its supporting chain (Eqs. (100)–(111)):
@@ -398,6 +432,10 @@ classes.
 - The full quark sector (Theorem 37): all coefficients and all six masses
   reproduce to ≤10⁻⁶ relative, all PDG pulls ≤ 0.35σ, with no missing
   normalization (E8).
+- The boson sector structure (Z_CS, Wilson-loop dressings, Weinberg angle
+  3/4π at 0.39σ, on-shell sin²θ_W to 10⁻⁵) verifies; the printed boson
+  formula misses one constant factor of the E7 class, and g/g′ carry
+  third-digit slips (E9).
 - CRITICAL_ASSESSMENT.md's solid/open split matches independent observation,
   including the honest T-1 FAIL, which remains open (E4).
 
