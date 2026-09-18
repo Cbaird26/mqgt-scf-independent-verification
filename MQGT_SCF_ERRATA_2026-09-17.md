@@ -410,6 +410,39 @@ energy is the assumption a referee will probe. H₀ = 68.5 km/s/Mpc is
 printed in the summary table; it follows from Λ through the framework's
 Friedmann sector and we did not independently re-derive it.
 
+## E12. Part IV novel predictions (new v3): all arithmetic verifies; two interpretive claims flagged as assertions
+
+The falsifiable forward-looking predictions (v5 Eqs. (188)–(192)) check
+out numerically end-to-end (`tuft_neutrino_alpha_verify.py` [J]): both QGT
+magnitudes (|Ω| = α/2π = 1.1614×10⁻³, |g| = α²/4π² = 1.3489×10⁻⁶), both
+prefactors (α²/4π = 4.2376×10⁻⁶, α³/8π² = 4.9216×10⁻⁹), and **all 15
+entries** of the five-configuration interferometer table (lab bench,
+piezo-enhanced, ZARM free-fall tower, AION-10, AION-100 × Δφ, δθ, θ_pol)
+reproduce the printed values at the printed precision, using g = 9.81 m/s²
+and c exactly. The falsification thresholds in the summary table are
+internally consistent with the predictions.
+
+**Two interpretive flags (not arithmetic errors).** (a) The statement
+"this is the *same* QGT recently measured by Sala et al." in
+LaAlO₃/SrTiO₃ is an interpretive identification of the Bloch-band QGT of a
+crystal with the spacetime fiber QGT — asserted, not derived; the paper's
+own insistence that it "is not an analogy" makes this a load-bearing claim
+a referee will probe hardest. (b) The dark-sector structural predictions
+(w = −1, flat rotation curves, discrete v₀ clustering, no DM particle)
+are qualitative in v5: the velocity-quantization relation
+v₀² = 4πGλ²_Ωn (Cor. 13) appears without a numerical λ_Ω, so there is
+currently no number to test; the discrete-v₀ clustering prediction needs a
+predicted spectrum before it can falsify anything.
+
+**Falsifiability assessment (the strongest feature of Part IV).** The
+phase-wobble row is a genuine, clean, near-term falsifier: Δφ =
+4.2×10⁻⁶ rad for a tabletop configuration against a stated
+10⁻¹⁰ rad/√Hz sensitivity floor — four orders of magnitude of margin,
+with GR predicting identically zero. If the MQGT-SCF program wants one
+experiment to champion, this is it; it requires no new facility, only a
+Mach–Zehnder with a controlled accelerated arm and Sagnac/redshift
+subtraction.
+
 ## E8. Quark masses (new v3): fully verified — no erratum, one reviewer note
 
 Theorem 37 (v5 Eq. (112)) and its supporting chain (Eqs. (100)–(111)):
@@ -472,6 +505,11 @@ classes.
   3/4π at 0.39σ, on-shell sin²θ_W to 10⁻⁵) verifies; the printed boson
   formula misses one constant factor of the E7 class, and g/g′ carry
   third-digit slips (E9).
+- CKM |Vus|/|Vcb| verify from independently generated masses (E10); the
+  cosmological constant Λ = 2.940×10⁻¹²² reproduces exactly under both α
+  conventions (E11).
+- All Part IV novel-prediction arithmetic (QGT magnitudes, prefactors,
+  the full 15-entry interferometer table) verifies (E12).
 - CRITICAL_ASSESSMENT.md's solid/open split matches independent observation,
   including the honest T-1 FAIL, which remains open (E4).
 

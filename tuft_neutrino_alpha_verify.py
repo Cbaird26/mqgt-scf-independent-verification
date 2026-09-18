@@ -341,3 +341,26 @@ for aname, aa in (("alpha = Theorem 48", alpha_th), ("alpha = experiment", alpha
 print(f"  sensitivity: d ln(Lambda)/d ln(alpha) = {float(-(mpf(2)+z3/24)/alpha_th):.1f}"
       "  -> 6.1e-7 alpha gap shifts Lambda by "
       f"{float(abs(-(mpf(2)+z3/24)/alpha_th)*6.08e-7*100):.3f}%")
+
+print()
+print("=" * 74)
+print("[J] Eqs. (189)-(192): novel interferometer predictions (Part IV)")
+print("=" * 74)
+c_light = mpf("299792458")
+P2 = alpha_th**2/(4*pi)     # wobble/steering prefactor
+P3 = alpha_th**3/(8*pi**2)  # polarization prefactor
+print(f"  |Omega| = alpha/2pi   = {float(alpha_th/(2*pi)):.4e}  (printed 1.161e-3)")
+print(f"  |g|     = alpha^2/4pi^2 = {float(alpha_th**2/(4*pi**2)):.4e}  (printed 1.349e-6)")
+print(f"  alpha^2/4pi  = {float(P2):.4e}  (printed 4.238e-6)")
+print(f"  alpha^3/8pi^2 = {float(P3):.4e}  (printed 4.922e-9)")
+g_ = mpf("9.81")
+rows = [("Lab bench",  mpf(1), mpf(1), mpf(1),   "4.2e-6",  "1.4e-14", "4.9e-9"),
+        ("Enhanced",   mpf(10), mpf(1), mpf(1),  "4.2e-5",  "1.4e-13", "4.9e-8"),
+        ("Free-fall",  g_,      mpf(1), mpf("4.7"), "9.2e-4", "6.5e-13", "1.1e-6"),
+        ("AION-10",    g_,      mpf(10), mpf("1.3"), "7.0e-6", "1.8e-13", "8.2e-9"),
+        ("AION-100",   g_,      mpf(100), mpf(3),    "3.7e-6", "4.2e-13", "4.3e-9")]
+print()
+print(f"  {'config':10s} {'dphi (mine / printed)':28s} {'dtheta':28s} {'theta_pol'}")
+for name, a, L, T, p1, p2, p3 in rows:
+    dp = P2*a*T**2/L; ds = P2*a*T/c_light; tp = P3*a*T**2/L
+    print(f"  {name:10s} {float(dp):.2e} / {p1:8s}    {float(ds):.2e} / {p2:8s}    {float(tp):.2e} / {p3}")
