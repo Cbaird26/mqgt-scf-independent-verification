@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this verification packet, please cite it as below."
+title: "Independent Verification of the MQGT-SCF Program and the Nielsen Topological Unified Field Theory"
+authors:
+  - family-names: Baird
+    given-names: Christopher M.
+version: v1.0-paper
+date-released: 2026-09-18
+url: "https://github.com/Cbaird26/mqgt-scf-independent-verification"
+license: CC-BY-4.0
+repository-code: "https://github.com/Cbaird26/mqgt-scf-independent-verification"
+keywords:
+  - unified field theory
+  - spectral zeta functions
+  - fine-structure constant
+  - Lean 4 verification
+  - independent replication

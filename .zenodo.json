@@ -1,0 +1,33 @@
+{
+  "title": "Independent Verification of the MQGT-SCF Program and the Nielsen Topological Unified Field Theory",
+  "description": "Verification packet: 8-page paper (LaTeX + PDF), errata E1-E13, and reproducible code (80-digit mpmath spectral determinants, Lean 4.34.0 kernels, 6/6 axiom-clean) for the MQGT-SCF program and TUFT v5 (Preprints 2026, 2026040315).",
+  "upload_type": "publication",
+  "publication_type": "workingpaper",
+  "creators": [
+    {
+      "name": "Baird, Christopher M."
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "keywords": [
+    "unified field theory",
+    "spectral zeta functions",
+    "fine-structure constant",
+    "neutrino masses",
+    "CKM mixing",
+    "Lean 4",
+    "independent verification"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Cbaird26/mqgt-scf-science-public",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "10.20944/preprints202604.0315.v5",
+      "relation": "references",
+      "resource_type": "publication-preprint"
+    }
+  ]
+}
