@@ -1,14 +1,19 @@
 # MQGT-SCF Errata and Findings from Independent Verification
 
-**Date:** 2026-09-17 (v2 — with fixes and resolutions found during repair pass)
+**Date:** 2026-09-17 (v3 — source manuscript located; E3 closed end-to-end,
+E2 revised, T-1 source derivation verified)
 **Basis:** Independent reproduction by a separately implemented harness
 (Kimi Work validation pipeline, calibrated 2026-09-16 against published
 causal-set/FRG/GR benchmarks), run against the canonical head
 `mqgt-scf-science-public` (2026-09-14) and the Gate-1 reconciliation.
+v3 additionally uses the source text: J. L. Nielsen, "The Complex Hopf
+Fibration as the Canonical Space for Gauge–Gravity Unification",
+Preprints.org 202604.0315.v5 (posted 2026-07-17, CC BY 4.0), 116 pp.
 **Companion artifacts:** `MQGT_SCF_Claims_Inventory.md` (claims table and
 reproduction log) and the verification scripts `mqgt_c6_independent_uv.py`,
 `mqgt_t3_independent.py`, `mqgt_t3_reverse_search.py`,
-`mqgt_t1_independent.py`, `mqgt_t1_topological_scan.py` in this repository.
+`mqgt_t1_independent.py`, `mqgt_t1_topological_scan.py`,
+`tuft_neutrino_alpha_verify.py` in this repository.
 
 Nothing here alleges misconduct. To the contrary: the program's software
 gates, blocked-mode preregistration discipline, and self-assessment all
@@ -40,7 +45,7 @@ one-coupling closure arithmetic (gN* = 4.4352 / 5.0265 / −7.94 for
 printing it with its truncation label, since the two-coupling (g, λ)
 Einstein–Hilbert truncation gives g* = 0.707321 (scheme dependence).
 
-## E2. Neutrino portal: oscillation-spectrum inconsistency — FIX SOLVED
+## E2. Neutrino portal: oscillation-spectrum inconsistency — FIX SOLVED (v3: source spectrum located)
 
 `neutrino_portal.py`: single y_ν = 0.1976 per generation, ⟨E⟩ = 0.1 eV,
 Σm_ν = 0.05928 eV, "exact match".
@@ -72,7 +77,23 @@ number changes; only the texture is added). The claim "exact match" should in
 either case be retired in favor of "reproduces the normal-ordering spectrum
 with a fitted Yukawa scale and a texture."
 
-## E3. T-3 spectral constants: RESOLVED — both constants identified, geometry reassigned
+**v3 revision — the source spectrum is non-degenerate; import it.** The
+portal's 0.05928 eV is inherited from the Nielsen TUFT neutrino formula
+(v5 preprint Eq. (136)–(142)), which predicts a **non-degenerate**
+three-generation spectrum with no free parameters beyond v = 246220 MeV:
+m = (0.000970, 0.008708, 0.049604) eV, Σm_ν = 0.059282 eV,
+Δm²₂₁ = 7.489×10⁻⁵ eV² and Δm²₃₁ = 2.460×10⁻³ eV², at −0.2σ and +0.2σ
+from the PDG central values. We re-derived the formula's spectral inputs
+independently and reproduced every printed number (see E3 v3 and
+`tuft_neutrino_alpha_verify.py`). The degeneracy critique in v1 therefore
+applies **only to the simplified portal script** (single y_ν), not to the
+underlying TUFT claim. Recommended fix, superseding variants A/B: replace
+the single Yukawa with the TUFT mass vector (equivalently Yukawa ratios
+(0.049, 0.441, 2.510) on the 0.01976 eV base, span 51×) and cite Eq. (136)
+as the source. The portal then has a genuine three-generation prediction,
+not a one-parameter fit to the normal-ordering floor.
+
+## E3. T-3 spectral constants: RESOLVED (v3: closed end-to-end against the source derivation)
 
 Claim (t3_beltrami framework): S7 = 1.748452 and S7′ = 0.41364, audited as
 "ζ′_Δ₂(0) = −0.41364 on S⁷." Upstream self-rates T-3 **FAIL** in
@@ -156,6 +177,48 @@ to close the remaining gap — why the constants enter Δφ_univ as α³S7/56 an
    and the Gaussian factor (det′|B|)^(−1/2) = 2.43145556544 — now computed to
    full precision whenever the sector is revisited.
 
+**E3 v3 closure (2026-09-17).** The Nielsen manuscript (v5 preprint,
+doi:10.20944/preprints202604.0315.v5) is now in hand and resolves every
+open sub-item:
+
+1. **The spheres and operators are confirmed at source.** The manuscript's
+   shell table (v5 p. 80) assigns S³ → leptons (B = ⋆d on 1-forms), S⁵ →
+   quarks (B on 2-forms), S⁷ → gluons, S⁹ → neutrinos (Δ₂ on coexact
+   2-forms). The S⁷ misassignment was introduced in the audit layer, not in
+   the source: the source has the sphere and operator right throughout.
+2. **Both towers and both ζ′ values are confirmed at source** (full ms
+   Eqs. (134)–(136), (143)–(154); v5 Eq. (138)). We additionally re-derived
+   both values by a third, analytically exact method (polynomial expansion
+   against Hurwitz ζ and ζ′ at 80-digit precision, in
+   `tuft_neutrino_alpha_verify.py`): ζ′_Δ₂(S⁹)(0) = −0.413644658189679 and
+   ζ′_B₇(S⁷)(0) = 1.74845220444776 — matching the printed −0.41364 and
+   +1.748452 to every quoted digit. The degeneracy polynomial the
+   manuscript prints for S⁹, d(k) = k(k+1)(k+3)(k+4)²(k+5)(k+7)(k+8)/720
+   from the SO(10) representation [k−1,0,1,0,0], is *identical* (after
+   k = K+1, x = K+5) to the polynomial we derived independently in v2 —
+   two fully independent paths to the same spectrum.
+3. **The framing numbers 56 and 16 are defined at source** (full ms
+   Eq. (154)): ℓ₇ = dim Λ³(R⁸) = C(8,3) = 56 and ℓ₉ = 2^(10−2)/2 = 16
+   (Spin(10) contact-chirality subsectors), entering Δφ_univ as
+   α³|ζ′_B₇(0)|/ℓ₇ and α⁴|ζ′_Δ₂(0)|/ℓ₉ alongside ℓ = 6 (Hopf self-linking
+   of the trefoil) for the α¹ coefficient 13/(24π) = (2ℓ+1)/(4πℓ) ✓.
+   What remains a *postulate* rather than a theorem is the uniform
+   distribution of the spectral weight over those ℓ subsectors — the
+   manuscript asserts the equipartition; it does not derive it. That is
+   now the precisely stated remaining gap for T-3, and it is a much
+   narrower gap than before.
+4. **Convention note (S⁵ shell).** The manuscript's `spectral5` =
+   (3ζ(5)+5π²ζ(3))/(8π⁴) = +0.080119 omits the 2ζ′_R(0) = −ln(2π) head term
+   that the full Beltrami tower on S⁵ carries (our ζ′ = −1.757764). This
+   affects the quark-sector coefficient a₅, not Δφ_univ. Worth one line in
+   any future edition, since an independent recomputation of the S⁵ tower
+   will land on the full-tower value.
+
+**Status: E3 closed.** What the constants are (identified, v2), that the
+source derives them on the correct spheres (v3), and how the framings enter
+(defined, v3) are all resolved; only the equipartition postulate remains
+open, and it is now named precisely.
+
 ## E4. T-1 (α⁻¹ identity): FAIL confirmed; gate-passing corrections provably uncertifiable
 
 The failure reproduces exactly: formula value 137.036082448164 vs CODATA
@@ -173,6 +236,28 @@ from this class can be certified without a structural derivation, and none of
 these values (the v1 π/2 hit included) may be cited as support for the
 identity in any venue. The repair path remains a genuine derivation of the
 topological prefactor from the Hopf volume asymptotics (Nielsen Eq. 11).
+
+**E4 v3 note — the source derivation is Theorem 48 of the v5 preprint.**
+The 137.0360824 value is produced in the source by
+α = [2·Vol(S²)/(Vol(S⁴)²·Vol(RP¹))]·[Vol(S⁹)/(2⁵·5)]^{1/4} on the
+S¹ → S⁹ → CP⁴ bundle, which we verified is *numerically identical* to
+Wyler's bounded-symmetric-domain formula (9/8π⁴)(π⁵/1920)^{1/4}
+(difference < 10⁻⁸³ at our working precision) and reproduces the printed
+137.03608244816433 exactly (`tuft_neutrino_alpha_verify.py` [A]). The
+manuscript labels the theorem "Derived, with one physical identification"
+and supplies a uniqueness lemma (Lemma 6: any SO(10)-invariant
+dimensionless fiber/gauge ratio satisfying its four conditions equals α).
+This substantially strengthens the provenance of the number — it is no
+longer an unmotivated literal — but our gate assessment is unchanged:
+(1) the identity still misses the program's own pre-registered 10⁻⁸ gate
+(6.08×10⁻⁷ off CODATA); (2) the uniqueness lemma proves uniqueness *within
+the chosen ingredient set* (sphere volumes, spectral volumes, Hua
+volumes); the selection of that set is where physical judgment enters, so
+"not reverse-engineered" is argued, not proven; (3) none of the 58
+gate-passing α³ corrections from the v2 scan may be cited as support. The
+honest statement is now: "α is computed from Hopf-bundle spectral geometry
+(Theorem 48) to 6 significant figures; the remaining 6×10⁻⁷ deviation is
+outside the program's own gate and no certified correction exists."
 
 ## E5. Minor: Pontryagin classes of CP⁴ misprinted (documentation)
 
@@ -193,7 +278,12 @@ classes.
   EMP-01 estimand in the current code.
 - The UV-completion trajectory and fixed-point claims (E1 modulo wording).
 - The neutrino-portal arithmetic (E2; texture fix supplied above).
-- Both T-3 constants, once assigned to the correct spheres (E3).
+- Both T-3 constants, on the correct spheres, now confirmed against the
+  source derivation by a third independent method (E3, closed).
+- The TUFT neutrino spectrum formula reproduces all printed masses and
+  both splittings within quoted rounding (E2 v3).
+- The Theorem 48 α formula reproduces its printed value exactly and is
+  numerically identical to Wyler's formula (E4 v3).
 - CRITICAL_ASSESSMENT.md's solid/open split matches independent observation,
   including the honest T-1 FAIL, which remains open (E4).
 
