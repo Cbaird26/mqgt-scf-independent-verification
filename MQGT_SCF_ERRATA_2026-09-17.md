@@ -383,6 +383,35 @@ v5 prints:
    whether Λ₃ is derived or fit, and regenerate the table from one
    canonical script.
 
+## E13. Lean 4 formalization (new v4): kernels check clean — after a one-line repair
+
+The author's repo ships `tuft_verify.lean` (self-contained, no Mathlib):
+six structural kernels covering charge quantization ⇒ nontrivial holonomy,
+domain indecomposability (no nontrivial idempotents), uniqueness of
+classifying objects up to homotopy equivalence (U(1) forcing onto Milnor's
+CP^∞ model), completeness-as-theorem (every bundle is a pullback), and
+second-difference invariance of the affine absorption convention.
+
+**Verified.** We ran it under Lean 4.34.0: **all six theorems compile and
+check in ~3 s, with no errors and no `sorry`.** The `#print axioms` audit
+is clean — `charge_quantization_forces_holonomy`, `classifying_unique`,
+`U1_forcing`, and `every_field_configuration_is_in_the_bundle` depend on
+*no* axioms at all; the other two touch only `propext`/`Quot.sound`
+(standard definitional quotients). This is a genuinely well-built logical
+skeleton: premises are explicit structure fields, and Milnor's theorem
+correctly enters as a named hypothesis rather than a smuggled fact.
+
+**Two notes.** (a) *As committed, the file does not compile*: the block
+comment opener `/-` on line 1 was clobbered by a LaTeX paste
+(`\begin{quote}\begin{verbatim}`); restoring `/-` fixes it. One-line
+erratum. (b) *Scope honesty*: the kernels verify the abstract logic of
+Part I's forcing chain, not its physical identifications — that nature's
+field content satisfies the `Classifies` premise, or that
+H*(CP^∞; ℤ) ≅ ℤ[c₁] applies to the physical bundle, remain physics
+assertions outside the Lean scope (the file is itself careful about this
+boundary). The spectral/numerical claims (E2–E12) are not covered by the
+Lean file.
+
 ## E9. Gauge boson and Higgs masses (v3: assembly gap; v4: RESOLVED at source — missing factor found in the author's code)
 
 Theorem 35 (v5 Eq. (87)–(90)): m_B = ΛB·(n+1)·e^{nα/6}·T_B(n) with
