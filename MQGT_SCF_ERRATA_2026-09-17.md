@@ -259,6 +259,47 @@ honest statement is now: "α is computed from Hopf-bundle spectral geometry
 (Theorem 48) to 6 significant figures; the remaining 6×10⁻⁷ deviation is
 outside the program's own gate and no certified correction exists."
 
+## E6. Anomalous magnetic moments (new v3): formula verified — and a hidden cancellation found
+
+The g−2 prediction (v5 Eqs. (144)–(148)) uses Δφ_univ plus three
+mass-dependent holonomy terms in L = ln(m_lepton/m_e), with
+σ₃ = ζ(3)/(4π²) (Lemma 4). We implemented the full system independently
+(`tuft_neutrino_alpha_verify.py` [D]).
+
+**Verified — internal consistency.** With α taken as the theory's own
+Theorem 48 value (1/137.0360824), the formulas reproduce every printed
+digit: a_e = 1.159652179949×10⁻³ (printed 1.159652180×10⁻³, rel diff
+4×10⁻¹¹), a_μ = 1.165920746967×10⁻³ (printed …747, rel diff 3×10⁻¹¹),
+a_τ = 1.177364662×10⁻³ (printed 1.177365×10⁻³, consistent at the printed
+7 digits). The published σ-pull claims (0.08σ electron, 0.22σ muon) also
+reproduce exactly. The formulas are implemented correctly in the source
+and the comparison table is arithmetically honest.
+
+**Found — the electron agreement depends on a cancellation.**
+a_e = Δφ_univ/(2π) is essentially linear in α. If one instead inserts the
+*measured* α (1/137.0359991), the same formula gives
+a_e = 1.1596528842×10⁻³ — a **+54σ** deviation from experiment. In other
+words the attenuated-Schwinger formula, evaluated at the true α, carries a
+~6×10⁻⁷-relative residual against the full QED series; the theory's own
+α is smaller than CODATA by 6.08×10⁻⁷ (the E4 gap), and that offset
+cancels the residual to land on experiment at 0.08σ. One of three readings
+must hold: (a) the cancellation is meaningful — α and a_e are joint
+predictions of one geometry, and the 6×10⁻⁷ "error" in α is precisely the
+missing higher-order content of the phase series, in which case the theory
+must explain why the *independent* recoil measurements of α point the
+other way; (b) the cancellation is coincidence at the 6×10⁻⁷ level — the
+same magnitude as the uncertified E4 correction class, which the program's
+own scan showed is densely populated by accidental gate-passers; or
+(c) the phase series is an approximation good to ~10⁻⁶ relative, and the
+sub-σ agreements are partly fortuitous. The muon claim is insensitive to
+this (0.22σ with α_thm, 0.51σ with α_exp — both sub-σ, and the "12× closer
+than LQCD WP25" comparison survives either convention, since the LQCD pull
+is 2.6σ). The electron claim and the a_τ "true prediction"
+(1.177365×10⁻³) both stand or fall with the α question. A clean
+discriminating test: the theory's a_τ differs between the two α
+conventions by ~3×10⁻¹⁰, within reach of the Belle II / CLIC sensitivities
+the manuscript itself names.
+
 ## E5. Minor: Pontryagin classes of CP⁴ misprinted (documentation)
 
 `t1_hopf_final.py` prints "p₁ = 10h², p₂ = 35h⁴" for CP⁴. With
@@ -284,6 +325,9 @@ classes.
   both splittings within quoted rounding (E2 v3).
 - The Theorem 48 α formula reproduces its printed value exactly and is
   numerically identical to Wyler's formula (E4 v3).
+- The g−2 formula system reproduces every printed value and published
+  σ-pull exactly under the theory's own α (E6); the α-dependence caveat
+  is documented there.
 - CRITICAL_ASSESSMENT.md's solid/open split matches independent observation,
   including the honest T-1 FAIL, which remains open (E4).
 

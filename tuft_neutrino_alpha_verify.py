@@ -121,3 +121,54 @@ base = mpf("0.01976")
 print("  y_n = m_n / 0.01976 eV:",
       {n: float(m[n]/base) for n in (1, 2, 3)})
 print(f"  span y_3/y_1 = {float(m[3]/m[1]):.1f}x")
+
+print()
+print("=" * 74)
+print("[D] Eqs. (144)-(148): anomalous magnetic moments (g-2)")
+print("=" * 74)
+
+ell, l7, l9 = 6, 56, 16
+sig3 = z3 / (4 * pi**2)
+zpB7 = mpf("1.74845220444776")   # verified in [C]
+zpD2 = mpf("-0.413644658189679") # verified in [C]
+alpha_exp = 1 / mpf("137.0359991")
+alpha_thm = 1 / mpf("137.03608244816433744")  # Theorem 48 value, verified [A]
+
+m_e = mpf("0.51099895000")   # MeV
+m_mu = mpf("105.6583755")    # MeV
+m_tau = mpf("1776.86")       # MeV
+
+def gminus2(alp, L):
+    phi = alp * exp(-alp*z3*(2*ell+1)/(4*pi*ell)
+                    - alp**2*z5/(4*pi**2)
+                    - alp**3*abs(zpB7)/l7
+                    - alp**4*abs(zpD2)/l9)
+    Cdet = -(mpf("0.5") - 4*sig3)
+    dphi4 = (alp/(2*pi))**2 * (pi/12) * (1 - alp*z3/(4*pi*ell)) * L*(L-2)
+    dphi5 = (alp/(2*pi))**3 * Cdet * L
+    dphi6 = -(alp/(2*pi))**4 * (1-sig3) * L**2*(L-2)
+    return phi/(2*pi) + dphi4 + dphi5 + dphi6
+
+cases = [("electron", m_e, "1.159652180e-3"),
+         ("muon",     m_mu, "1.165920747e-3"),
+         ("tau",      m_tau, "1.177365e-3")]
+for aname, aa in (("alpha = experiment (137.0359991)", alpha_exp),
+                  ("alpha = Theorem 48 (137.0360824)", alpha_thm)):
+    print(f"\n  convention: {aname}")
+    for name, mass, pr in cases:
+        L = log(mass/m_e)
+        a = gminus2(aa, L)
+        pv = mpf(pr.replace("e-3", "")) * 1e-3
+        print(f"    a_{name:8s} = {mp.nstr(a, 13)}   printed {pr}"
+              f"   rel diff {float(abs(a-pv)/pv):.2e}")
+
+print()
+print("  Pulls vs experiment (using alpha = experiment):")
+# electron: PDG 1.159652181(13)e-3 -> sigma 1.3e-11 ; muon: 1.165920715(146)e-3 -> sigma 1.46e-9
+a_e = gminus2(alpha_exp, mpf(0)); a_mu = gminus2(alpha_exp, log(m_mu/m_e))
+print(f"    electron: pred {mp.nstr(a_e,13)} vs PDG 1.159652181e-3 +/- 1.3e-11"
+      f"  -> pull {float((a_e - mpf('1.159652181e-3'))/mpf('1.3e-11')):+.2f} sigma")
+print(f"    muon:     pred {mp.nstr(a_mu,13)} vs PDG 1.165920715e-3 +/- 1.46e-9"
+      f"  -> pull {float((a_mu - mpf('1.165920715e-3'))/mpf('1.46e-9')):+.2f} sigma")
+print(f"    LQCD WP25 comparison: pred - LQCD(1.16592033e-3) = "
+      f"{float(a_mu - mpf('1.16592033e-3')):.3e}")
